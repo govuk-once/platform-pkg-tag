@@ -41,6 +41,7 @@ jobs:
         uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@7d9a5af9d60564f688328ef213c7e8ba3644766f # PR commit - brings in always-auth
         with:
           role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
+          package-manager: pnpm
 
       - name: Install dependencies
         run: "pnpm install"
