@@ -4,6 +4,9 @@
   "team": "platform",
   "license": "MIT",
   "packageManager": "pnpm@10.26.0",
+  "publishConfig": {
+    "registry": "https://registry-prod-904690835784.d.codeartifact.eu-west-2.amazonaws.com/npm/registry-prod-repo/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/gds-once/platform-pkg-tag.git"
