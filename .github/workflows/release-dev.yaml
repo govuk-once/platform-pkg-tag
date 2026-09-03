@@ -30,15 +30,12 @@ jobs:
 
       - name: Configure CodeArtifact auth
         id: code-artifact-auth
-        uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@b4f8bce4ba09bc31301025ff1a5b5daa4973dee6
+        uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@7d9a5af9d60564f688328ef213c7e8ba3644766f # PR commit - brings in always-auth
         with:
           role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
 
       - name: Install Deps
         run: pnpm install
-
-      - name: Create .npmrc for publishing config
-        run: echo "registry=${{ steps.code-artifact-auth.outputs.registry-url }}" >> .npmrc
 
       - name: Publish Package to CodeArtifact
         run: pnpm publish --no-git-checks --tag next
