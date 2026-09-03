@@ -39,5 +39,8 @@ jobs:
       - name: Install Deps
         run: pnpm install
 
+      - name: Create .npmrc for publishing config
+        run: echo "registry={{ steps.code-artifact-auth.registry-url }}" >> .npmrc
+
       - name: Publish Package to CodeArtifact
         run: pnpm publish --no-git-checks
