@@ -40,4 +40,4 @@ jobs:
         run: pnpm install
 
       - name: Publish Package to CodeArtifact
-        run: pnpm publish
+        run: pnpm publish --no-git-checks
