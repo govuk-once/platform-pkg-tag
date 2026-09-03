@@ -43,7 +43,6 @@ jobs:
         uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@b10af9b05ec74ac2274e3ddcb063326d555654c1 # PR commit - brings in always-auth
         with:
           role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
-          package-manager: npm
 
       - name: Install dependencies
         run: "pnpm install --frozen-lockfile"
