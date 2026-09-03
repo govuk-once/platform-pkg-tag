@@ -5,6 +5,7 @@ on:
     paths:
       - "src/**.ts"
       - "**.json"
+      - ".github/**.yaml"
 permissions:
   id-token: write
   contents: read
