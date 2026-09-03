@@ -39,13 +39,14 @@ jobs:
           cache: "pnpm"
   
       - name: Configure CodeArtifact auth
+        id: ca
         uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@a9d920242b6f20f993afec11e9cc6a67bb47ccde # PR commit - brings in always-auth
         with:
           role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
-          package-manager: pnpm
+          package-manager: npm
 
       - name: Install dependencies
-        run: "pnpm install"
+        run: "pnpm install --frozen-lockfile"
 
       - name: Spellcheck
         run: "pnpm run spg"
