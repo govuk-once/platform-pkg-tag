@@ -35,8 +35,5 @@ jobs:
       - name: Install Deps
         run: pnpm install
 
-      - name: Build Package
-        run: pnpm run build
-
       - name: Publish Package to CodeArtifact
         run: pnpm publish --tag next
