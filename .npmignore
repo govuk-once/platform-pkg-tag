@@ -1,0 +1,10 @@
+!dist/
+# Ignore the rest
+src/
+test/
+scripts/
+.cspell/
+tsconfig.json
+tsconfig.esm.json
+tsconfig.cjs.json
+cspell.json
