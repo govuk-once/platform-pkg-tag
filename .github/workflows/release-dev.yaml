@@ -1,4 +1,4 @@
-name: Publish Platform-Constructs (dev)
+name: Publish Tag Helpers (@next/development)
 on:
   push:
     branches: [main]

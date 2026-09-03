@@ -1,4 +1,4 @@
-name: Publish Platform-Constructs (dev)
+name: Publish Tag Helpers (production)
 on:
   push:
     tags:
@@ -14,8 +14,8 @@ permissions:
 
 jobs:
   publish:
-    name: Publish Platform-Constructs
-    environment: prod
+    name: Publish Tag Helpers
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
