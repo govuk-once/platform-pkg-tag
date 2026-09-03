@@ -39,7 +39,7 @@ jobs:
           package-manager: pnpm
 
       - name: Install Deps
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Publish Package to CodeArtifact
         run: pnpm publish --no-git-checks
