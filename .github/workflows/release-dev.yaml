@@ -19,14 +19,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Setup Node/PNPM
+        uses: pnpm/setup@v2
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          install: false
+          runtime: node@24
 
       - name: Configure CodeArtifact auth
         id: code-artifact-auth
@@ -36,9 +33,6 @@ jobs:
 
       - name: Install Deps
         run: pnpm install --frozen-lockfile
-
-      - name: debug
-        run: cat /home/runner/work/platform-pkg-tag/platform-pkg-tag/.npmrc
 
       - name: Publish Package to CodeArtifact
         run: pnpm publish --no-git-checks --tag next
