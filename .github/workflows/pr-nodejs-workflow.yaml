@@ -1,0 +1,55 @@
+name: CDK PR
+on:
+  pull_request:
+    branches: [main]
+    paths: 
+      - '**.ts'
+      - '**.json'
+      - '**.mts'
+      - 'lib/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-cdk:
+    name: Run CDK Unit Tests and Validation
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout-code
+        uses: actions/checkout@v6
+
+      - name: Configure Aws Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: GH-Actions-Tag-Pipeline
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+  
+      - name: Configure CodeArtifact auth
+        uses: govuk-once/platform-actions/.github/actions/codeartifact-auth@b4f8bce4ba09bc31301025ff1a5b5daa4973dee6
+        with:
+          role-to-assume: ${{ vars.DEPLOYMENT_ROLE_ARN }}
+
+      - name: Install dependencies
+        run: "pnpm install"
+
+      - name: Run Tests
+        run: "pnpm run test"
+
+      - name: Check Build
+        working-directory: test/cdk-app
+        run: |
+          pnpm install
+          pnpm run build
