@@ -97,6 +97,12 @@ const organization = "govuk-once";
 const sonarProject = "govuk-once_platform-pkg-tag";
 const jiraProject = "GUV";
 
+const prNumber = required("PR_NUMBER");
+
+if (!/^\d+$/.test(prNumber)) {
+  throw new Error("PR_NUMBER must be a valid pull request number");
+}
+
 const dryRun = process.env.DRY_RUN !== "false";
 const maxTickets = 5;
 
@@ -195,12 +201,8 @@ function validateExecution(): void {
     return;
   }
 
-  const isMainPush =
-    process.env.GITHUB_EVENT_NAME === "push" &&
-    process.env.GITHUB_REF === "refs/heads/main";
-
-  if (!isMainPush) {
-    throw new Error("Jira integration must run on a push to main");
+  if (process.env.GITHUB_EVENT_NAME !== "pull_request") {
+    throw new Error("Jira integration must run on a pull request");
   }
 }
 
@@ -317,7 +319,7 @@ async function getFindings(): Promise<SonarIssue[]> {
       componentKeys: sonarProject,
       impactSoftwareQualities: "SECURITY",
       impactSeverities: "HIGH,BLOCKER",
-      branch: "main",
+      pullRequest: prNumber,
       ps: "100",
       p: String(page),
     });
@@ -547,6 +549,7 @@ function findingUrl(issue: SonarIssue): string {
   url.searchParams.set("id", sonarProject);
 
   url.searchParams.set("issues", issue.key);
+  url.searchParams.set("pullRequest", prNumber);
 
   return url.toString();
 }
@@ -595,7 +598,7 @@ function createDescription(
 
     paragraph(`SonarCloud issue: ${issue.key}`),
 
-    paragraph(`Branch: main | Component: ${issue.component}`),
+    paragraph(`Pull Request: #${prNumber} | Component: ${issue.component}`),
 
     paragraph(`Finding URL: ${findingUrl(issue)}`),
 
@@ -734,7 +737,7 @@ async function runProduction(): Promise<void> {
   const findings = await getFindings();
 
   console.log(
-    `Found ${String(findings.length)} HIGH/BLOCKER security findings on main`,
+    `Found ${String(findings.length)} HIGH/BLOCKER security findings on PR #${prNumber}`,
   );
 
   let created = 0;
@@ -793,7 +796,7 @@ async function runProduction(): Promise<void> {
 async function main(): Promise<void> {
   validateExecution();
 
-  console.log("Mode: MAIN FINDINGS");
+  console.log(`Mode: PR #${prNumber} FINDINGS`);
   console.log(`Dry run: ${String(dryRun)}`);
 
   await runProduction();
