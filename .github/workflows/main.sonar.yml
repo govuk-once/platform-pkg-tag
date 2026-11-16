@@ -2,9 +2,13 @@
 name: Sonar Scan
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: read
@@ -61,19 +65,14 @@ jobs:
 
       - name: SonarCloud Security Findings to Jira
         continue-on-error: true
-        if: >-
-          ${{
-            always() &&
-            !cancelled() &&
-            github.event_name == 'push' &&
-            github.ref == 'refs/heads/main'
-          }}
+        if: ${{ success() && github.event_name == 'pull_request'}}
         env:
           SONAR_URL: https://sonarcloud.io
           SONAR_TOKEN_PLATFORM: ${{ secrets.SONAR_TOKEN }}
           JIRA_URL: ${{ secrets.JIRA_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           DRY_RUN: 'false'
         run: |
           pnpm exec tsx scripts/sonarToJira.ts
