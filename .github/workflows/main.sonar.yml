@@ -45,6 +45,16 @@ jobs:
       - name: Run Tests
         run: pnpm run test
 
+      - name: Check SonarCloud token
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "::error::SONAR_TOKEN is missing"
+            exit 1
+          fi
+          echo "SonarCloud token is available"
+
       - name: Run SonarQube Scan
         id: sonar-scan
         uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
