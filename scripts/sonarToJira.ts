@@ -1,3 +1,4 @@
+// cspell:words govuk Workstream customfield workstream epss apos remediat issuetype duedate
 import { createHash } from "node:crypto";
 
 type SonarSeverity = "BLOCKER" | "HIGH" | "MEDIUM" | "LOW" | "INFO";
